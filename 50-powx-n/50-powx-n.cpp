@@ -17,7 +17,9 @@ public:
     }
     double myPow(double x, int n){
         
-        double ans=  myPoww(x,abs(n));
+        long nn =n;
+        if(nn<0) nn=nn*-1;
+        double ans=  myPoww(x,nn);
         if(n<0)
             return 1.00/ans;
         else
