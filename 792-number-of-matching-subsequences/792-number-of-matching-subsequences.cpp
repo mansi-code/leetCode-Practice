@@ -1,29 +1,20 @@
 class Solution {
 public:
-    bool isSubsequence( string s , string w){
-        
-        int i=0, j=0;
-        while(i<s.size() && j<w.size()){
-            if(s[i]==w[j])
-                i++,j++;
-            else
-                i++; 
-        }
-        if(j==w.size())
-            return true;
-        return false;
-    }
     int numMatchingSubseq(string s, vector<string>& words) {
-        int count=0;
-        unordered_map<string,int>mymap;
-        for(int i=0; i<words.size(); i++){
-            mymap[words[i]]++;
+        vector<vector<int> > mappings(26);
+        for(int i = 0; i < size(s); i++) mappings[s[i] - 'a'].push_back(i);
+        int ans=0;
+        for(auto& word : words) {
+            bool found = true;
+            // i = index in word | prev = index in s matched for word[i-1]
+            for(int i = 0, prev = -1; found && i < size(word); i++) {
+                auto& v = mappings[word[i]-'a'];// word ka ith index 
+                auto it = upper_bound(begin(v), end(v), prev);   // check if current character exists in s with index > prev
+                if(it == end(v)) found = false;                  // doesn't exist
+                else prev = *it;                                 // update prev for next check
+            }
+            ans += found;
         }
-        for(auto x: mymap){
-             bool ans= isSubsequence(s, x.first);
-            if(ans)
-                count+= x.second;
-        }
-        return count;
+        return ans;
     }
 };
