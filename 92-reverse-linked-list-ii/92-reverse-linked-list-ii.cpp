@@ -10,67 +10,28 @@
  */
 class Solution {
 public:
-//    ListNode *reverse( ListNode* head){
-// ListNode* nextNode, *prevNode= NULL;
-// while(head){
-// 	nextNode= head->next;
-// 	head->next= prevNode;
-// 	prevNode= head;
-// 	head= nextNode;
-// }
-//  return prevNode;
-// }
-    
-      ListNode* reverse(ListNode* head){
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        if(head==NULL || left==right)
+            return head;
         
-        ListNode* prev = NULL, *next = NULL, *current = head;
-        while(current != NULL){
-            next = current->next;
-            current->next = prev;
-            prev = current;
-            current = next;
-            
+        ListNode* prev= NULL, *tail= NULL;
+    
+        ListNode* dummy= new ListNode(-1);
+        dummy->next=head;
+        prev= dummy ;
+       
+        int count=1;
+        for(int i=0; i<left-1; i++){
+            prev= prev->next;
+        }
+        tail= prev->next;
+        for(int i=0; i<right-left; i++){
+            ListNode* temp= prev->next;
+            prev->next= tail->next;
+            tail->next= tail->next->next;
+            prev->next->next= temp;
         }
         
-        return prev;
+         return dummy->next;
     }
-    
-    
-    ListNode* reverseBetween(ListNode* head, int left, int right) {
-ListNode* prev= NULL, *curr= head;
-     int count=1;
-	while(count!=left){
-		prev= curr;
-		curr= curr->next;
-		count++;
-	}
-	ListNode* start= curr;
-	while(count!= right){
-		curr= curr->next;
-		count++;
-	}
-	ListNode* rest = curr->next;
-	//prev stores the last value before left to join later
-	//start stores the next value or prev->next
-	//rest stores the rest of the nodes to be joined later 
-	//REVERSE the list from start to curr
-	curr->next=NULL;
-	ListNode *reversed= reverse(start);
-    
-	if(prev)
-		prev->next= reversed;
-	
-	curr= reversed;
-	while(curr->next!=NULL){
-		curr= curr->next;
-	}
-	curr->next= rest;
-	
-	if(left==1)
-		return reversed;
-	else
-		return head;
-	
-}
-
 };
